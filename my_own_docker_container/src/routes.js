@@ -2,7 +2,7 @@ const http = require('http');
 const fs = require('fs/promises');
 
 const host = 'localhost';
-const port = 8800;
+const port = 8080;
 
 /**
  * @param {string} dbName 
@@ -33,24 +33,24 @@ const requestListener = function (req, res) {
         case '/authors':
             getJSON('authors', ({ data, code }) => {
                 res.writeHead(code);
-                res.end(JSON.stringify(data))
+                res.end(data)
             });
             break;
         case '/books':
             getJSON('books', ({ data, code }) => {
                 res.writeHead(code);
-                res.end(JSON.stringify(data))
+                res.end(data)
             });
             break;
         case '/boots':
             getJSON('boots', ({ data, code }) => {
                 res.writeHead(code);
-                res.end(JSON.stringify(data))
+                res.end(data)
             });
             break;
         default: 
             res.writeHead(404);
-            res.end(JSON.stringify({ error: 'Non-existing endpoint' }))
+            res.end({ error: 'Non-existing endpoint' })
     }
 };
 
