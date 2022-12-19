@@ -10,13 +10,19 @@ const port = 8800;
  */
 function getJSON(dbName, onFinish) {
     fs.readFile(`${__dirname}/database/${dbName}.json`, 'utf8')
-        .then(contents => {
-            onFinish(contents)
+        .then(content => {
+            onFinish({ 
+                data: content,
+                code: 200
+            });
         })
         .catch(() => {
-            onFinish(JSON.stringify({
-                error: `Non-existing resource "${dbName}"! Check your request`,
-            }))
+            onFinish({
+                data: {
+                    error: `Non-existing resource "${dbName}"! Check your request`,
+                },
+                code: 404,
+            });
         });
 } 
 
@@ -25,21 +31,21 @@ const requestListener = function (req, res) {
     
     switch (req.url) {
         case '/authors':
-            getJSON('authors', json => {
-                res.writeHead(200);
-                res.end(json);
+            getJSON('authors', ({ data, code }) => {
+                res.writeHead(code);
+                res.end(JSON.stringify(data))
             });
             break;
         case '/books':
-            getJSON('books', json => {
-                res.writeHead(200);
-                res.end(json);
+            getJSON('books', ({ data, code }) => {
+                res.writeHead(code);
+                res.end(JSON.stringify(data))
             });
             break;
-        case '/boobs':
-            getJSON('boobs', json => {
-                res.writeHead(200);
-                res.end(json)
+        case '/boots':
+            getJSON('boots', ({ data, code }) => {
+                res.writeHead(code);
+                res.end(JSON.stringify(data))
             });
             break;
         default: 
