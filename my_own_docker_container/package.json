@@ -6,6 +6,6 @@
   "author": "Andrey Skripachev",
   "license": "MIT",
   "scripts": {
-    "start": "sudo ufw allow 8080; node src/routes.js"
+    "start": "node src/routes.js"
   }
 }

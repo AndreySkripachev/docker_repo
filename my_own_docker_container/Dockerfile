@@ -1,8 +1,10 @@
-# syntax=docker/dockerfile:1
 FROM ubuntu:20.04
-WORKDIR /my_own_docker_container
+WORKDIR /app
+COPY . .
 RUN apt update
 RUN apt install nodejs -y
-RUN echo ls
-# CMD ["node", "src/routes.js"]
-EXPOSE 8080
+RUN apt install npm -y
+RUN npm install --global yarn -y
+RUN yarn install
+RUN yarn start
+EXPOSE 3000

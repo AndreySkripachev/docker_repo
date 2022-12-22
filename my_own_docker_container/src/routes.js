@@ -1,29 +1,35 @@
 const http = require('http');
-const fs = require('fs/promises');
+// const fs = require('fs/promises');
 
 const host = 'localhost';
 const port = 8080;
 
 /**
  * @param {string} dbName 
- * @param {(json: string) => void} onFinish 
+ * @param {(json: object) => void} onFinish 
  */
 function getJSON(dbName, onFinish) {
-    fs.readFile(`${__dirname}/database/${dbName}.json`, 'utf8')
-        .then(content => {
-            onFinish({ 
-                data: content,
-                code: 200
-            });
-        })
-        .catch(() => {
-            onFinish({
-                data: {
-                    error: `Non-existing resource "${dbName}"! Check your request`,
-                },
-                code: 404,
-            });
-        });
+    // fs.readFile(`${__dirname}/database/${dbName}.json`, 'utf8')
+    //     .then(content => {
+    //         onFinish({ 
+    //             data: content,
+    //             code: 200
+    //         });
+    //     })
+    //     .catch(() => {
+    //         onFinish({
+    //             data: {
+    //                 error: `Non-existing resource "${dbName}"! Check your request`,
+    //             },
+    //             code: 404,
+    //         });
+    //     });
+    onFinish({
+        data: {
+            test: [1, 2, 3, 5],
+        },
+        code: 200,
+    });
 } 
 
 const requestListener = function (req, res) {
