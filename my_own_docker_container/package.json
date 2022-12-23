@@ -6,6 +6,8 @@
   "author": "Andrey Skripachev",
   "license": "MIT",
   "scripts": {
-    "start": "node src/routes.js"
+    "start": "node src/routes.js",
+    "container:build": "docker build . -t ubuntu-test",
+    "container:start": "docker run --publish 8080:8080 ubuntu-test"
   }
 }
