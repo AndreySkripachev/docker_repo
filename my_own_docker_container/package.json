@@ -8,6 +8,6 @@
   "scripts": {
     "start": "node src/routes.js",
     "container:build": "docker build . -t ubuntu-test",
-    "container:start": "docker run --publish 8080:8080 ubuntu-test"
+    "container:start": "docker run -p 127.0.0.1:8080:3000 ubuntu-test"
   }
 }

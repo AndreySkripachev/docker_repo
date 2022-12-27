@@ -1,40 +1,61 @@
 const http = require('http');
-const fs = require('fs');
 
 const host = 'localhost';
-const port = 8080;
+const port = 3000;
+
+const DatabaseData = {
+    authors: [
+        {
+            "name": "Pablo",
+            "country": "Spain",
+            "birth": 1999
+        },
+        {
+            "name": "Ubuntu",
+            "country": "Russia",
+            "birth": 2021
+        },
+    ],
+    books: [
+        { 
+            "title": "The Alchemist", 
+            "author": "Paulo Coelho", 
+            "year": 1988 
+        },
+        { 
+            "title": "The Prophet", 
+            "author": "Kahlil Gibran", 
+            "year": 1923
+        }
+    ]
+}
 
 /**
  * @param {string} dbName 
- * @param {(json: object) => void} onFinish 
  */
-function getJSON(dbName, onFinish) {
-    fs.readFile(`${__dirname}/database/${dbName}.json`, 'utf8', (err, data) => {
-        if (err) {
-            onFinish({
-                data: {
-                    error: `Cannot find ${dbName} database`,
-                },
-                code: 404,
-            });
-        }
-
-        onFinish({
-            data: data,
+function getJSON(dbName) {
+    if (dbName in DatabaseData) {
+        return {
+            data: DatabaseData[dbName],
             code: 200,
-        });
-    });
+        };
+    }
+
+    return {
+        data: {
+            error: `Cannot find ${dbName} database`,
+        },
+        code: 404,
+    };
 } 
 
 const requestListener = function (req, res) {
     res.setHeader("Content-Type", "application/json");
 
-    const url = req.url.slice(1);
+    const { code, data } = getJSON(req.url.replace('/', ''));
 
-    getJSON(url, ({ data, code }) => {
-        res.writeHead(code);
-        res.end(data);
-    });
+    res.writeHead(code);
+    res.end(JSON.stringify(data));
 };
 
 const server = http.createServer(requestListener);
