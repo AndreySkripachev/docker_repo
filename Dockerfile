@@ -7,4 +7,4 @@ RUN apt install npm -y
 RUN npm install --global yarn -y
 RUN yarn install
 CMD ["yarn", "start"]
-EXPOSE 8080
+EXPOSE 8800

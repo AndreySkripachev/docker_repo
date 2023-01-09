@@ -7,8 +7,8 @@
   "license": "MIT",
   "scripts": {
     "start": "node src/routes.js",
-    "container:build": "docker build . -t ubuntu-test",
+    "container:build": "docker build -t ubuntu-test .",
     "network:create": "docker network create -d bridge ubu_network",
-    "container:start": "docker run -d --rm -p 127.0.0.1:3000:3000 --name ubu-serve ubuntu-test"
+    "container:start": "docker run -dp 8800:8800 ubuntu-test"
   }
 }
