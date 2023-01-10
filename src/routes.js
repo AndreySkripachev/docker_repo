@@ -1,79 +1,41 @@
 const http = require('http');
-var os = require('os');
-var ifaces = os.networkInterfaces();
-let ipList = [];
+const fs = require('fs');
+const { getPcIp } = require('./get-pc-ip');
 
-Object.keys(ifaces).forEach(function (ifname) {
-  var alias = 0;
-
-  ifaces[ifname].forEach(function (iface) {
-    if ('IPv4' !== iface.family || iface.internal !== false) {
-      return;
-    }
-
-    ipList.push(iface.address);
-  });
-});
-
-const host = 'localhost';
+const host = getPcIp();
 const port = 8800;
-
-const DatabaseData = {
-    authors: [
-        {
-            "name": "Pablo",
-            "country": "Spain",
-            "birth": 1999
-        },
-        {
-            "name": "Ubuntu",
-            "country": "Russia",
-            "birth": 2021
-        },
-    ],
-    books: [
-        { 
-            "title": "The Alchemist", 
-            "author": "Paulo Coelho", 
-            "year": 1988 
-        },
-        { 
-            "title": "The Prophet", 
-            "author": "Kahlil Gibran", 
-            "year": 1923
-        }
-    ]
-}
 
 /**
  * @param {string} dbName 
  */
-function getJSON(dbName) {
-    if (dbName in DatabaseData) {
+function getData(dbName) {
+    try {
+        const { data } = require(`./mock/${dbName}`);
+
         return {
-            data: DatabaseData[dbName],
+            data,
             code: 200,
+        }
+    } catch(err) {
+        return {
+            data: {
+                error: `Cannot find ${dbName} database`,
+            },
+            code: 404,
         };
     }
-
-    return {
-        data: {
-            error: `Cannot find ${dbName} database`,
-        },
-        code: 404,
-    };
 } 
 
+/** @type {http.RequestListener<typeof http.IncomingMessage, typeof http.ServerResponse>} */
 const requestListener = function (req, res) {
     res.setHeader("Content-Type", "application/json");
 
-    const { code, data } = getJSON(req.url.replace('/', ''));
-
+    const { code, data } = getData(req.url.replace('/', ''));
     res.writeHead(code);
     res.end(JSON.stringify(data));
 };
 
 const server = http.createServer(requestListener);
-server.listen(port, ipList[0], () => {
+server.listen(port, host, () => {
     console.log(`Server is running on http://${host}:${port}`);
 });

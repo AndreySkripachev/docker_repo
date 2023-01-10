@@ -1,4 +1,4 @@
-[
+module.exports.data = [
     {
         "name": "Pablo",
         "country": "Spain",
@@ -9,4 +9,4 @@
         "country": "Russia",
         "birth": 2021
     }
-]
+];
